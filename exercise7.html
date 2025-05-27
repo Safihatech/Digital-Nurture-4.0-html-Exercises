@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Event Promo Video</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 20px auto;
+      padding: 10px;
+      text-align: center;
+    }
+    #statusMessage {
+      margin-top: 15px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Community Event Promo</h1>
+
+  <video id="promoVideo" width="600" controls
+    oncanplay="videoReady()"
+    >
+    <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm" type="video/webm">
+    <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div id="statusMessage"></div>
+
+  <script>
+    // Show message when video can start playing
+    function videoReady() {
+      const status = document.getElementById('statusMessage');
+      status.textContent = "Video ready to play!";
+    }
+
+    // Warn user if they try to leave the page
+    window.onbeforeunload = function(event) {
+      // Customize the message for some browsers, others ignore the custom text
+      const message = "Are you sure you want to leave? Your progress may be lost.";
+      event.returnValue = message; // Gecko, Trident, Chrome 34+
+      return message;              // Gecko, WebKit, Chrome <34
+    };
+  </script>
+
+</body>
+</html>

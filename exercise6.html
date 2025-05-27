@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Event Feedback Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+    #enlargedImage {
+      max-width: 100%;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    #enlargedImage.enlarged {
+      transform: scale(1.5);
+      border: 2px solid #333;
+      cursor: zoom-out;
+    }
+    #charCount {
+      font-size: 0.9em;
+      margin-top: 5px;
+      color: #555;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Event Feedback</h1>
+
+  <form id="feedbackForm">
+    <!-- Phone Number with onblur validation -->
+    <label for="phone">Phone Number (10 digits):</label>
+    <input type="text" id="phone" name="phone" onblur="validatePhone()" placeholder="Enter phone number" />
+    <div id="phoneError" class="error"></div>
+
+    <!-- Event selection with onchange for fee -->
+    <label for="eventSelect">Select Event:</label>
+    <select id="eventSelect" name="eventSelect" onchange="showFee()">
+      <option value="">--Choose--</option>
+      <option value="50">Community Meetup - $50</option>
+      <option value="30">Workshop - $30</option>
+      <option value="20">Social Gathering - $20</option>
+    </select>
+    <div id="feeDisplay"></div>
+
+    <!-- Feedback textarea with key events -->
+    <label for="feedback">Feedback:</label>
+    <textarea id="feedback" name="feedback" rows="5" cols="40" 
+      onkeyup="countChars()" onkeydown="countChars()" onkeypress="countChars()"
+      placeholder="Type your feedback here..."></textarea>
+    <div id="charCount">Characters: 0</div>
+
+    <!-- Submit button with onclick -->
+    <button type="button" onclick="submitFeedback()">Submit Feedback</button>
+  </form>
+
+  <!-- Image with ondblclick to enlarge -->
+  <h2>Event Photo</h2>
+  <img id="enlargedImage" src="https://via.placeholder.com/300" alt="Event" ondblclick="toggleImageSize()" />
+
+  <script>
+    function validatePhone() {
+      const phone = document.getElementById('phone').value.trim();
+      const phoneError = document.getElementById('phoneError');
+      const phoneRegex = /^\d{10}$/;
+      if (!phoneRegex.test(phone)) {
+        phoneError.textContent = "Please enter a valid 10-digit phone number.";
+      } else {
+        phoneError.textContent = "";
+      }
+    }
+
+    function showFee() {
+      const select = document.getElementById('eventSelect');
+      const feeDisplay = document.getElementById('feeDisplay');
+      if (select.value) {
+        feeDisplay.textContent = `Event fee: $${select.value}`;
+      } else {
+        feeDisplay.textContent = '';
+      }
+    }
+
+    function submitFeedback() {
+      // Basic check for phone error before submission
+      const phoneError = document.getElementById('phoneError').textContent;
+      if (phoneError) {
+        alert("Please fix errors before submitting.");
+        return;
+      }
+      alert("Thank you for your feedback!");
+      document.getElementById('feedbackForm').reset();
+      document.getElementById('feeDisplay').textContent = '';
+      document.getElementById('charCount').textContent = "Characters: 0";
+    }
+
+    function toggleImageSize() {
+      const img = document.getElementById('enlargedImage');
+      img.classList.toggle('enlarged');
+    }
+
+    function countChars() {
+      const text = document.getElementById('feedback').value;
+      document.getElementById('charCount').textContent = `Characters: ${text.length}`;
+    }
+  </script>
+
+</body>
+</html>

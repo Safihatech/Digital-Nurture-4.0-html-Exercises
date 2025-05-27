@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Save User Preferences</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    label, select, button {
+      display: block;
+      margin: 15px 0;
+      font-size: 1.1rem;
+    }
+    button {
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Select Your Preferred Event Type</h2>
+
+  <label for="eventType">Event Type:</label>
+  <select id="eventType">
+    <option value="">-- Choose an Event --</option>
+    <option value="music">Music Concert</option>
+    <option value="art">Art Exhibition</option>
+    <option value="sports">Sports Meet</option>
+    <option value="community">Community Gathering</option>
+  </select>
+
+  <button id="clearPrefsBtn">Clear Preferences</button>
+
+  <script>
+    const select = document.getElementById('eventType');
+    const clearBtn = document.getElementById('clearPrefsBtn');
+
+    // Load saved preference from localStorage on page load
+    window.onload = function() {
+      const savedEvent = localStorage.getItem('preferredEvent');
+      if (savedEvent) {
+        select.value = savedEvent;
+      }
+    };
+
+    // Save preference to localStorage when changed
+    select.addEventListener('change', function() {
+      if (select.value) {
+        localStorage.setItem('preferredEvent', select.value);
+        // Also saving in sessionStorage as example
+        sessionStorage.setItem('preferredEvent', select.value);
+      }
+    });
+
+    // Clear both localStorage and sessionStorage when button clicked
+    clearBtn.addEventListener('click', function() {
+      localStorage.removeItem('preferredEvent');
+      sessionStorage.removeItem('preferredEvent');
+      select.value = ""; // reset dropdown
+      alert("Preferences cleared!");
+    });
+  </script>
+
+</body>
+</html>

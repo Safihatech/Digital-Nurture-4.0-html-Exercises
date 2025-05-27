@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Geolocation for Event Mapping</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    #output {
+      font-size: 1.1rem;
+      color: #333;
+      min-height: 40px;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Event Locator</h2>
+  <button id="findBtn">Find Nearby Events</button>
+  <div id="output"></div>
+
+  <script>
+    const findBtn = document.getElementById('findBtn');
+    const output = document.getElementById('output');
+
+    // Options for getCurrentPosition
+    const geoOptions = {
+      enableHighAccuracy: true,
+      timeout: 10000, // 10 seconds
+      maximumAge: 0
+    };
+
+    function success(position) {
+      const lat = position.coords.latitude.toFixed(5);
+      const lon = position.coords.longitude.toFixed(5);
+      output.innerHTML = `<strong>Your Coordinates:</strong> <br>Latitude: ${lat} <br>Longitude: ${lon}`;
+    }
+
+    function error(err) {
+      switch(err.code) {
+        case err.PERMISSION_DENIED:
+          output.innerHTML = '<span class="error">Error: Permission to access location was denied.</span>';
+          break;
+        case err.POSITION_UNAVAILABLE:
+          output.innerHTML = '<span class="error">Error: Location information is unavailable.</span>';
+          break;
+        case err.TIMEOUT:
+          output.innerHTML = '<span class="error">Error: Location request timed out.</span>';
+          break;
+        default:
+          output.innerHTML = `<span class="error">Error: ${err.message}</span>`;
+      }
+    }
+
+    findBtn.addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        output.innerHTML = '<span class="error">Geolocation is not supported by your browser.</span>';
+        return;
+      }
+      output.textContent = 'Locating... Please wait.';
+      navigator.geolocation.getCurrentPosition(success, error, geoOptions);
+    });
+  </script>
+
+</body>
+</html>
